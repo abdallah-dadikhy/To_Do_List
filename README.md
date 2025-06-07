@@ -123,3 +123,15 @@ Follow these steps to get your development environment up and running:
 ```bash
 git clone <URL_OF_YOUR_REPOSITORY>
 cd your-project-name
+
+## API Testing
+
+You can use the provided Postman Collection or a tool like Insomnia to test the API endpoints.
+
+### Postman Collection
+* **File:** `ELKOOD_ToDo_API.json` (This file is located in the root of the repository.)
+* **Instructions:**
+    1.  Import the `ELKOOD_ToDo_API.json` file into Postman.
+    2.  Set up an environment variable in Postman (e.g., `baseUrl` = `http://localhost:8000/api`).
+    3.  Follow the request order (e.g., register/login first to obtain a `Bearer Token`).
+    4.  Set the `Authorization` header with `Bearer {{token}}` for protected routes.
