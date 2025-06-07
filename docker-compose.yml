@@ -1,0 +1,60 @@
+version: '3.8'
+
+services:
+  # Nginx web server service
+  nginx:
+    image: nginx:latest
+    ports:
+      - "8000:80" # Map host port 8000 to container port 80
+    volumes:
+      - .:/app # Mount current directory to /app in container
+      - ./docker-compose/nginx/nginx.conf:/etc/nginx/conf.d/default.conf # Nginx config
+    depends_on:
+      - app # Nginx depends on PHP-FPM service
+
+  # PHP-FPM application service
+  app:
+    build:
+      context: . # Build from Dockerfile in current directory
+      dockerfile: Dockerfile
+    volumes:
+      - .:/app # Mount current directory to /app in container (for development)
+    environment:
+      # Laravel Environment variables - match your .env or specify here
+      DB_CONNECTION: ${DB_CONNECTION:-mysql}
+      DB_HOST: db
+      DB_PORT: ${DB_PORT:-3306}
+      DB_DATABASE: ${DB_DATABASE:-laravel}
+      DB_USERNAME: ${DB_USERNAME:-root}
+      DB_PASSWORD: ${DB_PASSWORD:-password}
+      APP_DEBUG: ${APP_DEBUG:-true} # Set to false for production
+      APP_ENV: ${APP_ENV:-local} # Set to production for production
+      # Add other Laravel environment variables as needed from your .env
+    depends_on:
+      - db # App depends on database service
+
+  # Database service (MySQL example)
+  db:
+    image: mysql:8.0 # Use MySQL 8.0, you can change to postgres:latest if using PostgreSQL
+    ports:
+      - "3307:3306" # Optional: map host port 3307 to container port 3306
+    environment:
+      MYSQL_DATABASE: ${DB_DATABASE:-laravel}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD:-password}
+      MYSQL_USER: ${DB_USERNAME:-root}
+      MYSQL_PASSWORD: ${DB_PASSWORD:-password}
+      # For PostgreSQL:
+      # POSTGRES_DB: ${DB_DATABASE:-laravel}
+      # POSTGRES_USER: ${DB_USERNAME:-root}
+      # POSTGRES_PASSWORD: ${DB_PASSWORD:-password}
+    volumes:
+      - dbdata:/var/lib/mysql # Persistent volume for database data
+      # For PostgreSQL:
+      # - dbdata:/var/lib/postgresql/data
+    healthcheck: # Optional: health check for database
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
+
+volumes:
+  dbdata: # Define named volume for database persistence
