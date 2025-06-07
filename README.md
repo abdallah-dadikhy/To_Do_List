@@ -59,3 +59,67 @@ If you discover a security vulnerability within Laravel, please send an e-mail t
 ## License
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+
+# ELKOOD To-Do List RESTful API
+
+## Overview
+
+This project implements a professional RESTful API for managing daily tasks (To-Do List) as per ELKOOD's Backend Task requirements. It focuses on a scalable architecture, clean code practices, and robust functionality, including user management with role-based access control.
+
+## Technologies Used
+
+* **Backend Framework:** Laravel (PHP)
+* **Authentication:** Laravel Sanctum (for JWT-based API token authentication)
+* **Database:** MySQL (Configured for SQLite in testing)
+* **Database ORM:** Eloquent (Laravel's ORM) with Migrations & Seeders
+* **Architecture:**
+    * Repository Pattern for data access abstraction
+    * Dependency Injection (DI)
+    * Data Transfer Objects (DTOs) using `spatie/laravel-data` for input validation and output mapping.
+* **Error Handling & Logging:** Global error handling configured to return JSON responses for API errors, with robust logging.
+* **Development & Deployment:** Docker (Dockerfile & Docker Compose) - *Note: Docker setup is provided but requires local Docker installation.*
+* **Testing:** PHPUnit (for Unit and Feature/Integration Tests)
+
+## Features
+
+### User Management
+* **Registration:** Create new `guest` users.
+* **Login:** Authenticate users and issue API tokens.
+* **Logout:** Revoke active API tokens.
+* **User Details:** Retrieve authenticated user's own details.
+* **Owner Management:**
+    * View all users.
+    * Create (invite) new users (as `owner` or `guest`).
+    * Update user details (name, email, password, role).
+    * Delete users.
+    * *Role-Based Access Control*: Only `owner` users have full management capabilities. `Owner` cannot change their own role or delete their own account.
+
+### Task Management
+* **CRUD Operations:** Create, Retrieve (all, specific), Update, Delete tasks.
+* **Completion Status:** Mark tasks as completed or incomplete.
+* **Filtering & Searching:** Support for filtering tasks by completion status, priority, and category. Search by title or description.
+* **Pagination:** Support for paginating task lists.
+* **Categorization:** Tasks can be associated with categories and priorities.
+* *Role-Based Access Control*:
+    * `Owner` users have full CRUD access to their tasks.
+    * `Guest` users can only create tasks, view their tasks, and update the `is_completed` status of their own tasks. They cannot update other task fields or delete tasks.
+
+## Prerequisites
+
+Before running this project, ensure you have the following installed:
+
+* **PHP:** 8.1 or higher
+* **Composer:** Latest stable version
+* **Database:** MySQL (recommended) or PostgreSQL. For local development and testing, SQLite is also supported.
+* **Docker Desktop:** (Recommended for easy setup) - Includes Docker Engine and Docker Compose.
+* **Git**
+
+## Getting Started
+
+Follow these steps to get your development environment up and running:
+
+### 1. Clone the Repository
+
+```bash
+git clone <URL_OF_YOUR_REPOSITORY>
+cd your-project-name
